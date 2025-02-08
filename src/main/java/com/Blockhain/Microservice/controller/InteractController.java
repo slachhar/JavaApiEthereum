@@ -15,9 +15,9 @@ public class InteractController {
         SendTransaction.storeValue(value);
     }
 
-    @PostMapping("/simpleString/{value}")
-    public void storeSimpleIntegerValue(@PathVariable String value) throws Exception {
+    @PostMapping("/simpleString")
+    public void storeSimpleIntegerValue(@RequestBody Payload payload) throws Exception {
 //        SendTransaction st = new SendTransaction();
-        SendTransaction.storeSimpleIntegerValue(value);
+        SendTransaction.storeSimpleIntegerValue(payload.getValue());
     }
 }
