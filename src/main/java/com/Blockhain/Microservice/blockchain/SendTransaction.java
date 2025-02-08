@@ -51,4 +51,45 @@ public class SendTransaction {
         System.out.println("Got Data : " + data);
 
     }
+
+    public static void storeSimpleIntegerValue(String value) throws Exception {
+        // Connect to Ethereum node
+        Web3j web3j = Web3j.build(new HttpService("http://10.71.39.50:8545"));
+
+        // Get client version
+        Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().send();
+        System.out.println("Connected to Ethereum client: " + web3ClientVersion.getWeb3ClientVersion());
+
+        String privateKey = "0x37ecb317ed74c2868592c7f80282a9dea06046f3851a2393e9fac36768e90a36"; // Replace with your private key
+
+        // Load the wallet securely
+        // String privateKey = System.getenv("PRIVATE_KEY"); // Store securely
+        Credentials credentials = Credentials.create(privateKey);
+
+        String contractAddress = "0xDdBDa5F6FBDA0A8c8dd858FA8a0912585373f0c7"; // Replace with your contract's deployed address
+
+        // Define gas settings
+        StaticGasProvider gasProvider = new StaticGasProvider(BigInteger.valueOf(20000000000L), BigInteger.valueOf(1000000));
+
+        // Load the contract
+        SimpleStringStorage contract = SimpleStringStorage.load(contractAddress, web3j, credentials, gasProvider);
+
+        // Call storeData(int) function
+//        BigInteger valueToSend = BigInteger.valueOf(value);
+        TransactionReceipt transactionReceipt = contract.storeString(value).send();
+
+        // Print receipt details
+        System.out.println("Transaction Hash: " + transactionReceipt.getTransactionHash());
+        System.out.println("Block Number: " + transactionReceipt.getBlockNumber());
+        System.out.println("From: " + transactionReceipt.getFrom());
+        System.out.println("To: " + transactionReceipt.getTo());
+        System.out.println("Gas Used: " + transactionReceipt.getGasUsed());
+        System.out.println("Status: " + transactionReceipt.getStatus());
+
+//        var  data = contract.r().send();
+//
+//        System.out.println("Got Data : " + data);
+
+    }
+
 }
